@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firebase Test</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.box{
+background:#fff;
+width:340px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.2);
+}
+
+h2{
+text-align:center;
+color:#1565C0;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:5px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#1565C0;
+color:#fff;
+border:none;
+border-radius:5px;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0D47A1;
+}
+
+#msg{
+margin-top:10px;
+text-align:center;
+font-weight:bold;
+color:green;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+
+<h2>Customer Order</h2>
+
+<input type="text" id="name" placeholder="Customer Name">
+
+<input type="text" id="phone" placeholder="Phone Number">
+
+<input type="text" id="product" placeholder="Product">
+
+<button id="submitBtn">Submit</button>
+
+<p id="msg"></p>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDeoHQH_yEQT0jkfqPqMH6JfY-uyjGoFTU",
+    authDomain: "my-new-project-8d5ad.firebaseapp.com",
+    projectId: "my-new-project-8d5ad",
+    storageBucket: "my-new-project-8d5ad.firebasestorage.app",
+    messagingSenderId: "47352968700",
+    appId: "1:47352968700:web:d77fc56272e81e4d00ae79",
+    measurementId: "G-E17S0854TW"
+  };
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);document.getElementById("submitBtn").addEventListener("click", async () => {
+
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const product = document.getElementById("product").value.trim();
+
+  if (name === "" || phone === "" || product === "") {
+    alert("Please fill all the fields.");
+    return;
+  }
+
+  try {
+
+    await addDoc(collection(db, "customers"), {
+      name: name,
+      phone: phone,
+      product: product,
+      createdAt: new Date()
+    });
+
+    document.getElementById("msg").innerHTML =
+    "✅ Data saved successfully!";
+
+    document.getElementById("name").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("product").value = "";
+
+  } catch (error) {
+
+    alert("Error: " + error.message);
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
